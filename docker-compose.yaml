@@ -1,0 +1,41 @@
+services:
+  vaultwarden:
+    image: vaultwarden/server:latest
+    container_name: vaultwarden
+    restart: unless-stopped
+    ports:
+      - "3000:80"            
+    environment:
+      SIGNUPS_ALLOWED: "true"
+      WEB_VAULT_ENABLED: "true"
+      ADMIN_TOKEN: ${VW_ADMIN_TOKEN:?set in .env}
+    volumes:
+      - vw-data:/data
+
+  vw-rotation:
+    image: hadiserhan/vw-rotation:latest
+    container_name: vw-rotation
+    restart: unless-stopped
+    network_mode: host          # <-- lets it reach localhost:3000
+    environment:
+      VAULTWARDEN_URL: http://localhost:3000
+      CLIENT_ID: ${VW_CLIENT_ID:?set in .env}
+      CLIENT_SECRET: ${VW_CLIENT_SECRET:?set in .env}
+      AWS_SNS_REGION: ${AWS_SNS_REGION:-eu-west-1}
+      ROTATION_SNS_TOPIC_ARN: ${ROTATION_SNS_TOPIC_ARN:?set in .env}
+      AWS_SNS_ACCESS_KEY_ID: ${AWS_SNS_ACCESS_KEY_ID:-}
+      AWS_SNS_SECRET_ACCESS_KEY: ${AWS_SNS_SECRET_ACCESS_KEY:-}
+      ROTATION_FREQUENCY_DAYS: ${ROTATION_FREQUENCY_DAYS:-0}
+      ROTATION_GRACE_PERIOD_DAYS: ${ROTATION_GRACE_PERIOD_DAYS:-0}
+      ROTATION_SNS_DIGEST: ${ROTATION_SNS_DIGEST:-0}
+      ROTATION_POLL_SECONDS: ${ROTATION_POLL_SECONDS:-3600}
+      ROTATION_DRY_RUN: ${ROTATION_DRY_RUN:-0}
+      ROTATION_RUN_ONCE: ${ROTATION_RUN_ONCE:-1}
+      ROTATION_LOG_LEVEL: ${ROTATION_LOG_LEVEL:-INFO}
+      ROTATION_STATE_FILE: /state/.rotation_state.json
+    volumes:
+      - vw-rotation-state:/state
+
+volumes:
+  vw-data:
+  vw-rotation-state:

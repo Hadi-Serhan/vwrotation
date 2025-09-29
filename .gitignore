@@ -1,0 +1,62 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.eggs/
+.build/
+dist/
+.venv/
+venv/
+ENV/
+.python-version
+
+# pytest / caches / coverage
+.pytest_cache/
+.coverage*
+.cache/
+htmlcov/
+
+# Linters / type checkers
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.pyre/
+
+# IDE / OS
+.vscode/
+.idea/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Selenium / test artifacts
+reports/
+screenshots/
+*.log
+chromedriver.log
+geckodriver.log
+
+# Env & secrets (DON'T COMMIT SECRETS)
+.env
+.env.*
+*.env
+*.pem
+*.key
+*.p12
+*.crt
+*.der
+*.jks
+
+# Node (if any tooling sneaks in)
+node_modules/
+
+# Misc
+*.swp
+*.swo
+
+
+# Allure
+allure-results/
+allure-report/
+allure-history/
